@@ -72,6 +72,7 @@ struct fixture {
 	TEST_ERR(err);							\
 									\
 	f->magic = MAGIC;						\
+	f->estab_action = ACTION_RECANCEL;				\
 	f->exp_estab = 1;						\
 	f->exp_closed = 1;						\
 	mock_aucodec_register();					\
@@ -840,6 +841,7 @@ int test_call_aulevel(void)
 	err = mock_auplay_register(&auplay, mock_sample_handler, f);
 	TEST_ERR(err);
 
+	f->behaviour = BEHAVIOUR_ANSWER;
 	f->estab_action = ACTION_NOTHING;
 
 	/* Make a call from A to B */
@@ -1282,6 +1284,7 @@ int test_call_rtcp(void)
 	/* Use a low packet time, so the test completes quickly */
 	fixture_init_prm(f, ";ptime=1");
 
+	f->behaviour = BEHAVIOUR_ANSWER;
 	f->estab_action = ACTION_NOTHING;
 	f->stop_on_rtcp = true;
 
