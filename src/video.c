@@ -232,7 +232,7 @@ static int vidqent_alloc(struct vidqent **qentp,
 	return err;
 }
 
-
+static int number=0;
 static void vidqueue_poll(struct vtx *vtx, uint64_t jfs, uint64_t prev_jfs)
 {
 	size_t burst, sent;
@@ -256,16 +256,29 @@ static void vidqueue_poll(struct vtx *vtx, uint64_t jfs, uint64_t prev_jfs)
 
 	burst = min(burst, BURST_MAX);
 	sent  = 0;
-
+	//bug1: modify timestamp
+	#ifndef BUG1
+    int mark=0;
+	#endif
 	while (le) {
 
 		struct vidqent *qent = le->data;
 
 		sent += mbuf_get_left(qent->mb);
 
+		//bug1: modify timestamp
+		#ifndef BUG1
+		if(number==0)
+		{
+			number=qent->ts;
+		}
+		mark=qent->marker;
+		stream_send(vtx->video->strm, false, qent->marker, qent->pt,
+			    number, qent->mb);
+		#else
 		stream_send(vtx->video->strm, false, qent->marker, qent->pt,
 			    qent->ts, qent->mb);
-
+		#endif
 		le = le->next;
 		mem_deref(qent);
 
@@ -273,6 +286,13 @@ static void vidqueue_poll(struct vtx *vtx, uint64_t jfs, uint64_t prev_jfs)
 			break;
 		}
 	}
+	//bug1: modify timestamp
+	#ifndef BUG1
+	if(mark)
+	{
+		number+=6000;
+	}
+	#endif
 
  out:
 	lock_rel(vtx->lock_tx);
