@@ -510,7 +510,12 @@ int stream_alloc(struct stream **sp, const struct stream_param *prm,
 		err |= sdp_media_set_lattr(s->sdp, true,
 					   "label", "%d", label);
 	}
-
+	//BUG2 call: no common audio codecs - rejected   after open dtls_srtp
+	err = sdp_media_set_alt_protos(s->sdp, 4,
+				       "RTP/SAVP",
+				       "RTP/SAVPF",
+				       "UDP/TLS/RTP/SAVP",
+				       "UDP/TLS/RTP/SAVPF");
 	/* RFC 5506 */
 	err |= sdp_media_set_lattr(s->sdp, true, "rtcp-rsize", NULL);
 
