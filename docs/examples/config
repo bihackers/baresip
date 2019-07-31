@@ -90,7 +90,7 @@ module			v4l2.so
 #module			avformat.so
 #module			x11grab.so
 #module			cairo.so
-
+#module         ppsdevice.so
 # Video display modules
 module			x11.so
 #module			sdl2.so

@@ -53,6 +53,7 @@
 #   USE_X11           X11 video output
 #
 
+#   USE_PPSDEVICE     read buffer form pps device
 
 # Default is enabled
 MOD_AUTODETECT := 1
@@ -228,6 +229,10 @@ else
 USE_QTCAPTURE := yes
 endif
 
+#PPS
+ifneq ($(USE_PPSDEVICE),)
+USE_PPSDEVICE := $(shell [ -f $(SYSROOT)/include/PPCS_API.h ] && echo "yes")
+endif
 
 endif
 ifeq ($(OS),linux)
@@ -301,6 +306,9 @@ MODULES   += avcodec
 ifneq ($(USE_AVFORMAT),)
 MODULES   += avformat
 endif
+endif
+ifeq ($(USE_PPSDEVICE),)
+MODULES   += ppsdevice
 endif
 ifneq ($(USE_AVAHI),)
 MODULES   += avahi

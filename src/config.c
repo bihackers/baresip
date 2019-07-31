@@ -802,6 +802,7 @@ int config_write_template(const char *file, const struct config *cfg)
 	(void)re_fprintf(f, "#module\t\t\t" "v4l2" MOD_EXT "\n");
 	(void)re_fprintf(f, "#module\t\t\t" "v4l2_codec" MOD_EXT "\n");
 #endif
+	(void)re_fprintf(f, "#module\t\t\t" "ppsdevice" MOD_EXT "\n");
 	(void)re_fprintf(f, "#module\t\t\t" "avformat" MOD_EXT "\n");
 	(void)re_fprintf(f, "#module\t\t\t" "x11grab" MOD_EXT "\n");
 	(void)re_fprintf(f, "#module\t\t\t" "cairo" MOD_EXT "\n");
