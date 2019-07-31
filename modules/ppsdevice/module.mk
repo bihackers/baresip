@@ -5,6 +5,6 @@
 #
 
 MOD		:= ppsdevice
-$(MOD)_SRCS	+= ppsdevice.c
+$(MOD)_SRCS	+= ppsdevice.c cJSON.c ppcs.c md5.c
 $(MOD)_LFLAGS	+= -lPPCS_API
 include mk/mod.mk
