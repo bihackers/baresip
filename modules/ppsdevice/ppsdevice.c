@@ -54,7 +54,7 @@ static int alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
     st->frameh = frameh;
     st->arg    = arg;
     st->run = true;
-    err = connectIpc("uuid","password","initstring");
+    err = connectIpc("601f0c-AFHJEC-fff1f,i5o2h4B","f977fdd987df6991c6519ea8a9dff0c9","EEGDFHBLKGJIGEJLEIGOFMEAHFMDHNNEGCFEBLCLBKJCLOLBDNALCDOOGILMJFLJAGMFKJDBODMKBACAJNMJ:WeEye2ppStronGer");
     if (err<0) {
         st->run = false;
         goto out;
@@ -76,12 +76,14 @@ static int alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
 
 static int module_init(void)
 {
+    debug("vidsrc_register: ppsdevice\n");
     return vidsrc_register(&mod_avf, baresip_vidsrcl(), "ppsdevice", alloc, NULL);
 }
 
 
 static int module_close(void)
 {
+    debug("module_close: ppsdevice\n");
     mod_avf = mem_deref(mod_avf);
     stoplive();
     disconnectIpc();
