@@ -48,6 +48,7 @@ typedef struct
 #define SDK_STREAM_DATA_VIDEO  (int)1  
 
 int startlive(void*arg);
+int stoplive(void);
 void disconnectIpc(void);
 int connectIpc(char* uid,char* password,char* initstring);
     

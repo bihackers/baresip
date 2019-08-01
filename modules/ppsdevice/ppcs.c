@@ -50,7 +50,7 @@ int connectIpc(char* uid,char* password,char* initstring)
         sys_usleep(1000*1000);
     }
     
-    return 0;
+    return ret;
 }
 
 void disconnectIpc(void)
@@ -136,7 +136,7 @@ static int m_read(INT32 g_Session,UCHAR Channel,char * buf,INT32 *outBufSize) {
 
 static void* read_thread(void* arg)
 {
-    //struct vidsrc_st* p = (struct vidsrc_st*)arg;
+    struct vidsrc_st* p = (struct vidsrc_st*)arg;
     char *buf = (char*)malloc(1024*1024);
     PPSDEV_MEDIA_HEADER frameInfo = {0};
     int outBufSize = 0,I_frame_find=0;
@@ -194,6 +194,9 @@ static void* read_thread(void* arg)
             }else{
                 //please recall video data
                 froNo=frameInfo.magic;
+                p->sz.w   = frameInfo.media.video.width*8;
+                p->sz.h   = frameInfo.media.video.height*8;
+                //p->frameh();
                 //frametype=frameInfo.frame_type;
             }
         } 
@@ -226,3 +229,16 @@ int startlive(void*arg)
     pthread_create(&g_threadhandle, NULL, read_thread, arg);
     return 1;
 }
+
+int stoplive(void)
+{
+    PPCS_Header header = {0};
+    header.cmd = htonl(4863);
+    header.magic = htonl(0x56565099);
+    header.length = htonl(0);
+    header.seq = htonl(g_seq++);
+    encrypt(&header);
+    PPCS_Write(g_session, 0, (char*)&header, sizeof(PPCS_Header));
+    return 1;
+}
+

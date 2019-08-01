@@ -54,12 +54,17 @@ static int alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
     st->frameh = frameh;
     st->arg    = arg;
     st->run = true;
-    err = connectIpc(NULL,NULL,NULL);
-    if (err) {
+    err = connectIpc("uuid","password","initstring");
+    if (err<0) {
         st->run = false;
         goto out;
     }
-
+    err=startlive(st);
+     if (err<0) {
+        st->run = false;
+        goto out;
+    }
+     err=0;
  out:
     if (err)
         mem_deref(st);
@@ -78,6 +83,7 @@ static int module_init(void)
 static int module_close(void)
 {
     mod_avf = mem_deref(mod_avf);
+    stoplive();
     disconnectIpc();
     return 0;
 }
